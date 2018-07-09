@@ -1,0 +1,238 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Declarations -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- Title -->
+	<title>Data Collection</title>
+
+	<!-- Materialize CSS and Fonts -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.skinFlat.min.css"
+	/>
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.skinHTML5.min.css" /> -->
+	<!-- <link rel="stylesheet" href="css/normalize.css"> -->
+
+	<!-- Materialize JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/js/ion.rangeSlider.min.js"></script>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<nav class="white">
+		<div class="nav-wrapper">
+			<a href="#!" class="brand-logo">
+				<span>
+					<img src="{% static 'images/seekhley_logo.png' %}" width="100" />
+				</span>
+			</a>
+			<a href="#" data-target="slider_menu" class="sidenav-trigger">
+				<i class="material-icons grey-text darken-2">menu</i>
+			</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down white">
+				<li class="active">
+					<a href="#" class="grey-text text-darken-2">Data Collection</a>
+				</li>
+				<li>
+					<a href="{% url 'dataviz' %}" class="grey-text text-darken-2">Data Visualisation and Inference</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- Sliding Menu -->
+	<ul class="sidenav" id="slider_menu">
+		<li class="active">
+			<a href="#" class="grey-text text-darken-2">Data Collection</a>
+		</li>
+		<li>
+			<a href="{% url 'dataviz' %}" class="grey-text text-darken-2">Data Visualisation and Inference</a>
+		</li>
+	</ul>
+
+	<!-- Start Form Body -->
+	<div>
+		<div class="row valign-wrapper center-align">
+			<div class="col s12 m6">
+				<div class="row">
+					<form class="col s12" method="POST" action="/sdm/dataviz/">
+						{% csrf_token %}
+						<h2 class="grey-text">Let us get to know you!</h2>
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="person_name" type="text" class="validate" name="name" required>
+								<label for="person_name">Full Name</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="person_roll_no" type="text" class="validate" name="roll_no" required>
+								<label for="person_roll_no">Roll No.</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s12">
+								<p>
+									<label>
+										<input type="checkbox" id="share_permission" />
+										<span>Do you agree to share your data with us?</span>
+									</label>
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s12">
+								<button class="btn waves-effect waves-light" type="submit" name="action">Submit
+									<i class="material-icons right">send</i>
+								</button>
+							</div>
+						</div>
+				</div>
+			</div>
+			<div class="col s12 m6" style="align-self:bottom;height:88vh;overflow-y: scroll;">
+				<p class="range-field">
+					Friendliness
+					<input type="text" id="friendliness" name="friendliness_name" value="" />
+				</p>
+				<p class="range-field">
+					Sportiness
+					<input type="text" id="sportiness" name="sportiness_name" value="" />
+				</p>
+				<p class="range-field">
+					Kindness
+					<input type="text" id="kindness" name="kindness_name" value="" />
+				</p>
+				<p class="range-field">
+					Talkativeness
+					<input type="text" id="talkativeness" name="talkativeness_name" value="" />
+				</p>
+				<p class="range-field">
+					Extroversion
+					<input type="text" id="extroversion" name="extroversion_name" value="" />
+				</p>
+				<p class="range-field">
+					Popularity
+					<input type="text" id="popularity" name="popularity_name" value="" />
+				</p>
+				Gender
+				<p>
+					<label>
+						<input name="gender_name" type="radio" value="1" />
+						<span>Boy</span>
+					</label>
+					<!-- Some quick fix to seperate out the radio boxes -->
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>
+						<input name="gender_name" type="radio" value="0" checked />
+						<span>Girl</span>
+					</label>
+				</p>
+				<p class="range-field">
+					Hardworking
+					<input type="text" id="hardworking" name="hardworking_name" value="" />
+				</p>
+				<p class="range-field">
+					Intelligence
+					<input type="text" id="intelligence" name="intelligence_name" value="" />
+				</p>
+				<p class="range-field">
+					Punctuality
+					<input type="text" id="punctuality" name="punctuality_name" value="" />
+				</p>
+				<p class="range-field">
+					Creativity
+					<input type="text" id="creativity" name="creativity_name" value="" />
+				</p>
+				<p class="range-field">
+					Leadership
+					<input type="text" id="leadership" name="leadership_name" value="" />
+				</p>
+				<p class="range-field">
+					Disciplined
+					<input type="text" id="disciplined" name="disciplined_name" value="" />
+				</p>
+				<p class="range-field">
+					Loyalty
+					<input type="text" id="loyalty" name="loyalty_name" value="" />
+				</p>
+			</div>
+		</div>
+		</form>
+	</div>
+
+	<div class="fixed-action-btn">
+		<button class="btn-floating btn-large waves-effect red modal-trigger" data-target="bug_modal">
+			<i class="large material-icons">bug_report</i>
+		</button>
+	</div>
+
+	<!-- Bug Modal -->
+	<div id="bug_modal" class="modal">
+		<div class="modal-content">
+			<h4>Known Bugs</h4>
+			<ul class="collection">
+				<li class="collection-item">
+					<del>Pressing back button messes up data flow. You can't return to current screen</del>
+				</li>
+				<li class="collection-item">
+					<del>If you press refresh again after choosing friends, the results do not include the one you previously chose</del>
+				</li>
+			</ul>
+		</div>
+		<div class="modal-footer">
+			Found something broken that is not mentioned?
+			<a href="mailto:abhinavmathur96@gmail.com" class="modal-close waves-effect waves-red btn-flat" style="margin-bottom: 10px;">Mail us</a>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('.sidenav').sidenav();
+			$('.modal').modal();
+		});
+
+		var sliderVal = ['Low', 'Below Average', 'Average', 'Above Average', 'High']
+
+		// Initialising the sliders
+		var $friendliness = $("#friendliness").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $sportiness = $("#sportiness").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $kindness = $("#kindness").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $talkativeness = $("#talkativeness").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $extroversion = $("#extroversion").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $popularity = $("#popularity").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $hardworking = $("#hardworking").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $intelligence = $("#intelligence").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $punctuality = $("#punctuality").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $creativity = $("#creativity").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $leadership = $("#leadership").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $disciplined = $("#disciplined").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+		var $loyalty = $("#loyalty").ionRangeSlider({ min: 1, max: 5, grid: true, from: 2, prettify: function (num) { return sliderVal[num - 1]; } });
+
+		function checkPermission() {
+			if ($('#share_permission').is(":checked")) {
+				console.log('checkbox ticked');
+				return true;
+			}
+			M.toast({ html: 'Please give us permission to use your data. Tick the checkbox above the submit button' });
+			return false;
+		}
+
+		$('form').submit(function (e) {
+			if (checkPermission()) {
+				$('form').unbind().submit();
+			}
+			return false;
+		});
+
+		
+	</script>
+</body>
+
+</html>

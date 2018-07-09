@@ -1,0 +1,568 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Declarations -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- Title -->
+	<title>Data Visualisation</title>
+
+	<!-- Materialize CSS and Fonts -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/css/ion.rangeSlider.skinFlat.min.css"
+	/>
+	<!-- <link rel="stylesheet" href="css/normalize.css"> -->
+
+	<!-- Materialize JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.2.0/js/ion.rangeSlider.min.js"></script>
+	<script type="text/javascript" src="{% static 'js/viz.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/lite.render.js' %}"></script>
+
+	<style>
+		@keyframes rotation {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(359deg);
+			}
+		}
+
+		@-webkit-keyframes rotation {
+			from {
+				-webkit-transform: rotate(0deg);
+			}
+			to {
+				-webkit-transform: rotate(359deg);
+			}
+		}
+
+		.loading {
+			animation: rotation 2s infinite linear;
+			-webkit-animation: rotation 2s infinite linear
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Navbar -->
+	<nav class="white">
+		<div class="nav-wrapper">
+			<a href="#!" class="brand-logo">
+				<span>
+					<img src="{% static 'images/seekhley_logo.png' %}" width="100" />
+				</span>
+			</a>
+			<a href="#" data-target="slider_menu" class="sidenav-trigger">
+				<i class="material-icons grey-text darken-2">menu</i>
+			</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down white">
+				<li>
+					<a href="{% url 'index' %}" class="grey-text text-darken-2">Data Collection</a>
+				</li>
+				<li class="active">
+					<a href="#" class="grey-text text-darken-2">Data Visualisation and Inference</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<!-- Sliding Menu -->
+	<ul class="sidenav" id="slider_menu">
+		<li>
+			<a href="{% url 'index' %}" class="grey-text text-darken-2">Data Collection</a>
+		</li>
+		<li class="active">
+			<a href="#" class="grey-text text-darken-2">Data Visualisation and Inference</a>
+		</li>
+	</ul>
+
+	<div class="center-align">
+		<h5 style="display: inline;">{{ name }}</h5>
+		<i class="material-icons">trending_flat</i>
+		<h5 style="display: inline;">{{ uid }}</h5>
+	</div>
+
+	<!-- Start Form Body -->
+	<div class="row valign-wrapper">
+		<div class="col s12">
+			<ul class="collapsible popout">
+				<li>
+					<div class="collapsible-header" style="display: block;">
+						<h5>1. Collect Data
+							<i class="material-icons green-text right" style="font-size: 40px;">done_all</i>
+						</h5>
+					</div>
+					<div class="collapsible-body">
+						<span>Awesome! You just completed the collection process when you shared your data with us. Move on to the next step!</span>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header" style="display: block;">
+						<h5>2. Specify Predictor Variable
+							<i id="step_2" class="material-icons orange-text right" style="font-size: 40px;">priority_high</i>
+						</h5>
+					</div>
+					<div class="collapsible-body center-align">
+						<div class="row">
+							<div class="col s12">
+								<button class="waves-effect btn-flat right" onclick="add_friends()">
+									<i class="material-icons right">send</i>send
+								</button>
+								<button class="btn-flat waves-effect right" onclick="fetch_children()">
+									<i id="refresh_fetch_children" class="material-icons right">refresh</i>refresh
+								</button>
+							</div>
+						</div>
+						<div id="predictor_body">
+							Click on refresh button to see people who have already submitted and choose friends
+						</div>
+						<div class="row">
+							<div class="col s12">
+								<p class="grey-text text-lighten-1">You cannot unfriend anybody</p>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header" style="display: block;">
+						<h5>3. Inference from Data
+							<i id="step_3" class="material-icons right" style="font-size: 40px;"></i>
+						</h5>
+					</div>
+					<div class="collapsible-body">
+						<ul class="collection">
+							<li class="collection-item">
+								<p class="left">Correlation Values</p>
+								<button class="waves-effect btn-flat right" onclick="get_correlation_matrix()">
+									<i id="refresh_get_correlation_matrix" class="material-icons right">refresh</i>refresh
+								</button>
+								<div id="corr_val" class="center-align"></div>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header" style="display: block;">
+						<h5>4. Create and Select Models
+							<i id="step_4" class="material-icons right" style="font-size: 40px;"></i>
+						</h5>
+					</div>
+					<div class="collapsible-body">
+						<ul class="collection">
+							<li class="collection-item">
+								<p style="display: inline-block">Decision Tree</p>
+								<button class="waves-effect btn-flat right" style="display: inline-block" onclick="train_decision_tree()">
+									<i id="refresh_train_decision_tree" class="material-icons right">refresh</i>train tree
+								</button>
+								<div id="tree_img" class="center-align"></div>
+							</li>
+							<li class="collection-item">
+								<p style="display: inline-block">SVM (SGD)</p>
+								<button class="waves-effect btn-flat right" style="display: inline-block" onclick="train_svm()">
+									<i id="refresh_train_svm" class="material-icons right">refresh</i>train SVM
+								</button>
+								<div id="svm_message" class="center-align"></div>
+							</li>
+							<li class="collection-item">
+								<p style="display: inline-block">Random Forest Ensemble</p>
+								<button class="waves-effect btn-flat right" style="display: inline-block" onclick="train_rf()">
+									<i id="refresh_train_rf" class="material-icons right">refresh</i>train random forest
+								</button>
+								<div id="rf_message" class="center-align"></div>
+							</li>
+							<li class="collection-item">
+								<p style="display: inline-block">K Nearest Neighbors</p>
+								<button class="waves-effect btn-flat right" style="display: inline-block" onclick="train_knn()">
+									<i id="refresh_train_knn" class="material-icons right">refresh</i>train KNN
+								</button>
+								<div id="knn_message" class="center-align"></div>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header" style="display: block;">
+						<h5>5. Predict
+							<i id="step_5" class="material-icons right" style="font-size: 40px;"></i>
+						</h5>
+					</div>
+					<div class="collapsible-body center-align">
+						<div class="row">
+							<div class="col s12">
+								<p class="flow-text">ABHINAV MATHUR</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">Tree</p>
+									<div id="tree_pred_abhinav"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">SVM</p>
+									<div id="svm_pred_abhinav"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">RF</p>
+									<div id="rf_pred_abhinav"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">KNN</p>
+									<div id="knn_pred_abhinav"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s12">
+								<p class="flow-text">AISHWARYA GUPTA</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">Tree</p>
+									<div id="tree_pred_aishwarya"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">SVM</p>
+									<div id="svm_pred_aishwarya"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">RF</p>
+									<div id="rf_pred_aishwarya"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">KNN</p>
+									<div id="knn_pred_aishwarya"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header" style="display: block;">
+						<h5>6. Recap + Morals + Takeaways
+							<i id="step_6" class="material-icons right" style="font-size: 40px;"></i>
+						</h5>
+					</div>
+					<div class="collapsible-body">
+						<span>Lorem ipsum dolor sit amet.</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="fixed-action-btn">
+		<button class="btn-floating btn-large waves-effect red modal-trigger" data-target="bug_modal">
+			<i class="large material-icons">bug_report</i>
+		</button>
+	</div>
+
+	<!-- Bug Modal -->
+	<div id="bug_modal" class="modal">
+		<div class="modal-content">
+			<h4>Known Bugs</h4>
+			<ul class="collection">
+				<li class="collection-item">
+					Pressing back button messes up data flow. You can't return to current screen
+				</li>
+				<li class="collection-item">
+					If you press refresh again after choosing friends, the results do not include the one you previously chose
+				</li>
+			</ul>
+		</div>
+		<div class="modal-footer">
+			Found something broken that is not mentioned?
+			<a href="mailto:abhinavmathur96@gmail.com" class="modal-close waves-effect waves-red btn-flat" style="margin-bottom: 10px;">Mail us</a>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('.sidenav').sidenav();
+			$('.collapsible').collapsible();
+			$('.modal').modal();
+		});
+
+		var tree = false;
+		var svm = false;
+		var rf = false;
+		var knn = false;
+
+		function complete(step) {
+			$('#' + step).removeClass('orange-text');
+			$('#' + step).text('done_all');
+			$('#' + step).addClass('green-text');
+		}
+
+		function in_progress(step) {
+			$('#' + step).removeClass('green-text');
+			$('#' + step).text('priority_high');
+			$('#' + step).addClass('orange-text');
+		}
+
+		function animate_status(id, status) {
+			$('#' + id).fadeOut('fast', function () {
+				$('#' + id).text(status === 'complete' ? 'check' : 'close').fadeIn('fast', function () {
+					$('#' + id).removeClass('loading');
+					$('#' + id).fadeOut('fast', function () {
+						$('#' + id).text('refresh').fadeIn('fast');
+					})
+				})
+			});
+		}
+
+		function arrange_children(data, a) {
+			let len = Math.floor(data.length / a);
+			let count = 0;
+			let s = ''
+
+			for (let i = 0; i <= len; i++) {
+				if (count < data.length) {
+					s += `<div class="row">`
+
+					for (let j = 0; j < a && count < data.length; j++) {
+						s +=
+							`
+							<div class="col s` + Math.floor(12 / a) + `">
+								<label>
+									<input type="checkbox" name="` + data[count][0] + `" />
+									<span>` + data[count][1] + ` (` + data[count][0] + `) ` + `</span>
+								</label>
+							</div>
+							`
+						count += 1;
+					}
+					s += `</div>`
+				}
+			}
+			return s
+		}
+
+		function fill_pred(clf, preds) {
+			$('#' + clf + '_pred_abhinav').empty();
+			$('#' + clf + '_pred_aishwarya').empty();
+			$('#' + clf + '_pred_abhinav').append(preds[0] == 1 ? '<i class="large material-icons green-text">check</i>' : '<i class="large material-icons red-text">close</i>');
+			$('#' + clf + '_pred_aishwarya').append(preds[1] == 1 ? '<i class="large material-icons green-text">check</i>' : '<i class="large material-icons red-text">close</i>');
+			if (tree && svm && rf && knn) {
+				complete('4');
+				complete('5');
+			} else {
+				in_progress('5');
+			}
+		}
+
+		function fetch_children() {
+			$('#refresh_fetch_children').addClass('loading');
+			$.ajax({
+				url: "/sdm/api/fetch_children/",
+				type: 'POST',
+				data: {
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				if (data['type'] == 'error') {
+					M.toast({ html: data['message'] });
+				} else {
+					if (data['data'].length == 0) {
+						M.toast({ html: 'You are the only person in the database yet' });
+					} else {
+						$('#predictor_body').empty();
+						$('#predictor_body').html(arrange_children(data['data'], 3));
+						if (data['friend_count'] > 0) {
+							$.each(data['existing_friends'], function (id, val) {
+								$('input[name="' + val + '"]').prop('checked', 'checked');
+							});
+							complete('step_2');
+							in_progress('step_3');
+						}
+					}
+				}
+				animate_status('refresh_fetch_children', 'complete');
+			}).fail(function () {
+				M.toast({ html: 'Cannot fetch names' });
+				animate_status('refresh_fetch_children', 'fail');
+			});
+		}
+
+		function add_friends() {
+			let el = $('#predictor_body :checked');
+			let arr = [];
+
+			$.each(el, function (ind, elem) {
+				arr.push(elem.name);
+			});
+
+			$.ajax({
+				url: "/sdm/api/add_friends/",
+				type: 'POST',
+				data: {
+					elements: arr,
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				M.toast({ html: data['message'] });
+				if (data['type'] == 'success' && data['count'] > 0) {
+					complete('step_2');
+					in_progress('step_3');
+				}
+			}).fail(function (data) {
+				M.toast({ html: 'Cannot add friends' });
+			});
+		}
+
+		function get_correlation_matrix() {
+			$('#refresh_get_correlation_matrix').addClass('loading');
+			$.ajax({
+				url: "/sdm/api/get_correlation_matrix/",
+				type: 'POST',
+				data: {
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				$('#corr_val').html(`<img src="data:image/png;base64,` + data + `" />`);
+				animate_status('refresh_get_correlation_matrix', 'complete');
+				complete('step_3');
+				in_progress('step_4');
+			}).fail(function (data) {
+				M.toast({ html: 'Cannot fetch records' });
+				animate_status('refresh_get_correlation_matrix', 'fail');
+			});
+		}
+
+		function train_decision_tree() {
+			$('#refresh_train_decision_tree').addClass('loading');
+			$.ajax({
+				url: "/sdm/api/train_decision_tree/",
+				type: 'POST',
+				data: {
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				var viz = new Viz();
+				$('#tree_img').empty();
+				viz.renderSVGElement(data['data']).then(function (element) {
+					$('#tree_img').html(element);
+				});
+				$('#tree_img').append('<p>Score: ' + data['score'] + '</p>');
+				tree = true;
+				fill_pred('tree', data['pred']);
+				animate_status('refresh_train_decision_tree', 'complete');
+			}).fail(function (data) {
+				M.toast({ html: 'Cannot generate graph' });
+				animate_status('refresh_train_decision_tree', 'fail');
+			});
+		}
+
+		function train_svm() {
+			$('#refresh_train_svm').addClass('loading');
+			$.ajax({
+				url: "/sdm/api/train_svm/",
+				type: 'POST',
+				data: {
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				$('#svm_message').html('<p>Constants</p>');
+				$('#svm_message').append('<p>' + data['coeff'][0].join(' || ') + '</p><p>Intercept</p>');
+				$('#svm_message').append('<p>' + data['intercept'][0] + '</p><p>Score</p>');
+				$('#svm_message').append('<p>' + data['score'] + '</p>');
+				svm = true;
+				fill_pred('svm', data['pred']);
+				animate_status('refresh_train_svm', 'complete');
+			}).fail(function (data) {
+				M.toast({ html: 'Cannot train SVM Classifier' });
+				animate_status('refresh_train_svm', 'fail');
+			});
+		}
+
+		function train_rf() {
+			$('#refresh_train_rf').addClass('loading');
+			$.ajax({
+				url: "/sdm/api/train_rf/",
+				type: 'POST',
+				data: {
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				$('#rf_message').html('Score: ' + data['score']);
+				rf = true;
+				fill_pred('rf', data['pred']);
+				animate_status('refresh_train_rf', 'complete');
+			}).fail(function (data) {
+				M.toast({ html: 'Cannot train Random Forest Classifier' });
+				animate_status('refresh_train_rf', 'fail');
+			});
+		}
+
+		function train_knn() {
+			$('#refresh_train_knn').addClass('loading');
+			$.ajax({
+				url: "/sdm/api/train_knn/",
+				type: 'POST',
+				data: {
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				$('#knn_message').html('Score: ' + data['score']);
+				knn = true;
+				fill_pred('knn', data['pred']);
+				animate_status('refresh_train_knn', 'complete');
+			}).fail(function (data) {
+				M.toast({ html: 'Cannot train KNN Classifier' });
+				animate_status('refresh_train_knn', 'fail');
+			});
+		}
+
+		function pred_abhinav() {
+			$.ajax({
+				url: "/sdm/api/predict/",
+				type: 'POST',
+				data: {
+					roll_no: '{{ uid }}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}
+			}).done(function (data) {
+				console.log(data);
+				if (data['type'] == 'success') {
+					//
+				} else {
+					//
+				}
+			}).fail(function (data) {
+				M.toast({ html: 'Cannot predict' });
+			});
+		}
+	</script>
+</body>
+
+</html>
