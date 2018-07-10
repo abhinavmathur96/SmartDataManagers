@@ -407,6 +407,22 @@
 			}
 		}
 
+		function getCookie(name) {
+			var cookieValue = null;
+			if (document.cookie && document.cookie !== '') {
+				var cookies = document.cookie.split(';');
+				for (var i = 0; i < cookies.length; i++) {
+					var cookie = jQuery.trim(cookies[i]);
+					// Does this cookie string begin with the name we want?
+					if (cookie.substring(0, name.length + 1) === (name + '=')) {
+						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+						break;
+					}
+				}
+			}
+			return cookieValue;
+		}
+
 		function fetch_children() {
 			$('#refresh_fetch_children').addClass('loading');
 			$.ajax({
@@ -414,7 +430,7 @@
 				type: 'POST',
 				data: {
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				if (data['type'] == 'error') {
@@ -455,7 +471,7 @@
 				data: {
 					elements: arr,
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				M.toast({ html: data['message'] });
@@ -475,7 +491,7 @@
 				type: 'POST',
 				data: {
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				$('#corr_val').html(`<img src="data:image/png;base64,` + data + `" />`);
@@ -495,7 +511,7 @@
 				type: 'POST',
 				data: {
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				var viz = new Viz();
@@ -520,7 +536,7 @@
 				type: 'POST',
 				data: {
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				$('#svm_message').html('<p>Constants</p>');
@@ -543,7 +559,7 @@
 				type: 'POST',
 				data: {
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				$('#rf_message').html('Score: ' + data['score']);
@@ -563,7 +579,7 @@
 				type: 'POST',
 				data: {
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				$('#knn_message').html('Score: ' + data['score']);
@@ -582,7 +598,7 @@
 				type: 'POST',
 				data: {
 					roll_no: '{{ uid }}',
-					csrfmiddlewaretoken: '{{ csrf_token }}'
+					csrfmiddlewaretoken: getCookie('csrftoken')
 				}
 			}).done(function (data) {
 				console.log(data);
