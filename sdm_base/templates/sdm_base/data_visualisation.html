@@ -198,32 +198,32 @@
 					<div class="collapsible-body center-align">
 						<div class="row">
 							<div class="col s12">
-								<p class="flow-text">ABHINAV MATHUR</p>
+								<p class="flow-text">KOMAL MARWAH</p>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col s12 m3">
 								<div class="card-panel">
 									<p class="flow-text">Tree</p>
-									<div id="tree_pred_abhinav"></div>
+									<div id="tree_pred_komal"></div>
 								</div>
 							</div>
 							<div class="col s12 m3">
 								<div class="card-panel">
 									<p class="flow-text">SVM</p>
-									<div id="svm_pred_abhinav"></div>
+									<div id="svm_pred_komal"></div>
 								</div>
 							</div>
 							<div class="col s12 m3">
 								<div class="card-panel">
 									<p class="flow-text">RF</p>
-									<div id="rf_pred_abhinav"></div>
+									<div id="rf_pred_komal"></div>
 								</div>
 							</div>
 							<div class="col s12 m3">
 								<div class="card-panel">
 									<p class="flow-text">KNN</p>
-									<div id="knn_pred_abhinav"></div>
+									<div id="knn_pred_komal"></div>
 								</div>
 							</div>
 						</div>
@@ -258,6 +258,37 @@
 								</div>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col s12">
+								<p class="flow-text">ABHINAV MATHUR</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">Tree</p>
+									<div id="tree_pred_abhinav"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">SVM</p>
+									<div id="svm_pred_abhinav"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">RF</p>
+									<div id="rf_pred_abhinav"></div>
+								</div>
+							</div>
+							<div class="col s12 m3">
+								<div class="card-panel">
+									<p class="flow-text">KNN</p>
+									<div id="knn_pred_abhinav"></div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</li>
 				<li>
@@ -286,10 +317,10 @@
 			<h4>Known Bugs</h4>
 			<ul class="collection">
 				<li class="collection-item">
-					Pressing back button messes up data flow. You can't return to current screen
+					<del>Pressing back button messes up data flow. You can't return to current screen</del>
 				</li>
 				<li class="collection-item">
-					If you press refresh again after choosing friends, the results do not include the one you previously chose
+					<del>If you press refresh again after choosing friends, the results do not include the one you previously chose</del>
 				</li>
 			</ul>
 		</div>
@@ -362,10 +393,12 @@
 		}
 
 		function fill_pred(clf, preds) {
-			$('#' + clf + '_pred_abhinav').empty();
+			$('#' + clf + '_pred_komal').empty();
 			$('#' + clf + '_pred_aishwarya').empty();
-			$('#' + clf + '_pred_abhinav').append(preds[0] == 1 ? '<i class="large material-icons green-text">check</i>' : '<i class="large material-icons red-text">close</i>');
+			$('#' + clf + '_pred_abhinav').empty();
+			$('#' + clf + '_pred_komal').append(preds[0] == 1 ? '<i class="large material-icons green-text">check</i>' : '<i class="large material-icons red-text">close</i>');
 			$('#' + clf + '_pred_aishwarya').append(preds[1] == 1 ? '<i class="large material-icons green-text">check</i>' : '<i class="large material-icons red-text">close</i>');
+			$('#' + clf + '_pred_abhinav').append(preds[2] == 1 ? '<i class="large material-icons green-text">check</i>' : '<i class="large material-icons red-text">close</i>');
 			if (tree && svm && rf && knn) {
 				complete('4');
 				complete('5');

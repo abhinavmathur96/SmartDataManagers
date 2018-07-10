@@ -23,8 +23,9 @@ _ATTRIBUTES = ['friendliness', 'sportiness', 'kindness', 'talkativeness', 'extro
 
 _FRIENDS = np.array(
     [
-        [4, 2, 3, 2, 3, 3, 4, 3, 3, 2, 4, 2, 5], # Abhinav Mathur
-        [5, 4, 3, 2, 1, 2, 4, 4, 3, 2, 4, 3, 5]  # Aishwarya Gupta
+        [5, 3, 5, 4, 4, 4, 5, 5, 3, 4, 5, 4, 5], # Komal Marwah
+        [5, 4, 3, 2, 1, 2, 4, 4, 3, 2, 4, 3, 5], # Aishwarya Gupta
+        [4, 2, 3, 2, 3, 3, 4, 3, 3, 2, 4, 2, 5] # Abhinav Mathur
     ]
 )
 
